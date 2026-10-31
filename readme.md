@@ -1,5 +1,5 @@
 ## AI DISCLOSURE: ##
-This project does not knowingly contain nor accept any code produced in any capacity by "AI" or LLMs. Likewise, the indexing or modification of the code in this repository by agents is strictly forbidden. If you want to make something cool, enrich yourself with the skills to do so! Don't ask autocomplete to do it for you!
+This project does use Ai.
 
 ## PROGRESS: ##
 ![overall progress badge for the project](https://decomp.dev/2Tie/mh1j/SLPM_654.95.svg?mode=shield&style=plastic)  
