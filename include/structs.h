@@ -11,6 +11,18 @@ typedef struct {
 } Vec3; // Size: 0x0C
 
 typedef struct {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ s16 w;
+    /* 0x06 */ s16 h;
+    /* 0x08 */ u32 color;
+    /* 0x0C */ s16 u0;
+    /* 0x0E */ s16 v0;
+    /* 0x10 */ s16 u1;
+    /* 0x12 */ s16 v1;
+} SPRITE; // size: 0x14 (20)
+
+typedef struct {
     /* 0x00 */ u16 current_state;
     /* 0x02 */ u16 previous_state;
     /* 0x04 */ u16 just_pressed;
@@ -51,6 +63,41 @@ typedef enum {
 } SW_BUTTONS;
 
 typedef enum {
+	BUTTON_CIRCLE = 0x00,
+	BUTTON_CROSS = 0x01,
+	BUTTON_TRIANGLE = 0x02,
+	BUTTON_SQUARE = 0x03,
+	BUTTON_L1 = 0x04,
+	BUTTON_L2 = 0x05,
+	BUTTON_R1 = 0x06,
+	BUTTON_R2 = 0x07,
+	BUTTON_START = 0x08,
+	BUTTON_SELECT = 0x09,
+	BUTTON_LEFT = 0x0A,
+	BUTTON_DOWN = 0x0B,
+	BUTTON_RIGHT = 0x0C,
+	BUTTON_UP = 0x0D,
+	BUTTON_R3 = 0x0E,
+	BUTTON_L3 = 0x0F,
+	BUTTON_ARROW = 0x10,
+	BUTTON_LEFT_STICK = 0x11,
+	BUTTON_RIGHT_STICK = 0x12,
+	BUTTON_DPAD = 0x13,
+	//xbox buttons
+	BUTTON_B = 0x00,
+	BUTTON_A = 0x01,
+	BUTTON_Y = 0x02,
+	BUTTON_X = 0x03,
+	BUTTON_L = 0x04,
+	BUTTON_WHITE = 0x05,
+	BUTTON_R = 0x06,
+	BUTTON_BLACK = 0x07,
+	BUTTON_BACK = 0x09
+} BUTTON_GLYPH; //from cpit apx files
+
+#define SW_ALL 0xFFFF
+
+typedef enum {
 	JOB_GREATSWORD = 0,
 	JOB_BOWGUN_HEAVY = 1,
 	JOB_HAMMER = 2,
@@ -58,6 +105,63 @@ typedef enum {
 	JOB_SNS = 4,
 	JOB_BOWGUN_LIGHT = 5
 } JOBS;
+
+typedef enum {
+	EM_RATHIAN = 1,
+	EM_FATALIS = 2,
+	EM_KELBI = 3,
+	EM_MOSSWINE = 4,
+	EM_BULLFANGO = 5,
+	EM_YIAN_KUT_KU = 6,
+	EM_LAO_SHAN_LUNG = 7,
+	EM_CEPHADROME = 8,
+	EM_FELYNE = 9,
+	EM_VEGGIE_ELDER = 10,
+	EM_RATHALOS = 11,
+	EM_APTONOTH = 12,
+	EM_GENPREY = 13,
+	EM_DIABLOS = 14,
+	EM_KHEZU = 15,
+	EM_VELOCIPREY = 16,
+	EM_GRAVIOS = 17,
+	EM_CART = 18,
+	EM_VESPOID = 19,
+	EM_GYPCEROS = 20,
+	EM_PLESIOTH = 21,
+	EM_BASARIOS = 22,
+	EM_MELYNX = 23,
+	EM_HORNETAUR = 24,
+	EM_APCEROS = 25,
+	EM_MONOBLOS = 26,
+	EM_VELOCIDROME = 27,
+	EM_GENDROME = 28,
+	EM_ROCK = 29,
+	EM_IOPREY = 30,
+	EM_IODROME = 31,
+	EM_POOGIE = 32,
+	EM_KIRIN = 33,
+	EM_CEPHALOS = 34
+} SPECIES;
+
+typedef struct {
+    VEC3 pt1;
+    VEC3 pt2;
+    f32 rad;
+} CAPSULE;
+
+typedef struct {
+    VEC3 pos;
+    f32 rad;
+} SPHERE;
+
+typedef struct {
+    VEC3 pt1;
+    VEC3 pt2;
+    f32 rad;
+    VEC3 pts_vec;
+    VEC3 origin;
+    f32 cap_distance;
+} PK;
 
 typedef struct {
     /* 0x00 */ u8* memoryblock;
@@ -100,25 +204,6 @@ typedef struct {
     /* 0x03 */ u8 pad2;
     /* 0x04 */ ACTIVE_EVENT_DEMO demos[2];
 } EVENT_DEMO; // Size: 0x24
-
-typedef struct {
-    bool is_stereo;
-    u8 BGM_vol;
-    u8 SFX_vol;
-    bool vibrate;
-    u8 targeting_type;
-    u8 screen_xoff;
-    u8 screen_yoff;
-    u8 unk_7;
-    u8 unk_8;
-    u8 unk_9;
-    u8 unk_A;
-    u8 unk_B;
-    u8 unk_C;
-    u8 unk_D;
-    u8 unk_E;
-    u8 unk_F;
-} OPTIONS_WORK;
 
 typedef struct {
     f32 pos[3];
@@ -176,6 +261,17 @@ typedef struct {
     /* 0x0A */ u8 b3;
     /* 0x0B */ u8 b4;
 } STAGE_FOG; // Size: 0x0C
+
+typedef struct {
+	s16 parent_bone;
+	s16 is_capsule;
+	s16 meat_zone;
+	s16 body_group;
+	s32 unk_8;
+	f32 radius; //capsule
+	VEC3 point_1;
+	VEC3 point_2;
+} HIT_DATA; // size: 0x28
 
 typedef struct {
     /* 0x00 */ u16 item;
@@ -279,6 +375,20 @@ typedef struct PART_WORK {
 } PART_WORK; // size: unk
 
 typedef struct {
+	/* 0x00 */ u8 unk_0[0x2];
+    /* 0x02 */ union{
+		JOBS job; 
+		SPECIES species; 
+		u8 unk_2; //NPC ID?
+	};
+	
+    /* 0x03 */ u8 unk_3[0x10 - 0x3];
+    /* 0x10 */ u8 is_monster; // maybe entity_type? 0 player, 1 monster... 3 npc?
+    /* 0x11 */ u8 unk_11[0xAC - 0x11];
+    /* 0xAC */ f32 pos[3];
+} ENTITY; //monster and player have this as the base, not sure how large yet
+
+typedef struct {
     /* 0x000 */ u8 unk_0[0x2];
     /* 0x002 */ JOBS job;
     /* 0x003 */ u8 unk_3[0x9];
@@ -358,15 +468,62 @@ typedef struct {
 typedef struct {
     /* 0x000 */ u8 exists;
     /* 0x001 */ u8 unk_1;
-    /* 0x002 */ u8 species;
-    /* 0x003 */ u8 unk_3[0x5D];
+    /* 0x002 */ SPECIES species;
+    /* 0x003 */ u8 unk_3[0x10 - 0x3];
+    /* 0x010 */ u8 is_monster;
+    /* 0x011 */ u8 unk_11[0x60 - 0x11];
     /* 0x060 */ MATRIX matrix;
     /* 0x0A0 */ u8 unk_a0[0xC];
     /* 0x0AC */ f32 pos[3];
-    /* 0x0B8 */ u8 unk_0B8[0x2D0];
+    /* 0x0B8 */ u8 unk_0B8[0x2D0]; // 0xB8 might be f32 scale?
     /* 0x388 */ u8 unk_388; // read in F_DragonEscapeCamera
-    /* 0x389 */ u8 unk_389[0x687];
+    /* 0x389 */ u8 unk_389[0x736-0x389];
+	/* 0x736 */ u8 current_area_id;
+	/* 0x737 */ u8 unk_737[0xa10-0x737];
 } MONSTER_WORK; // size: 0xa10?
+
+typedef struct {
+	/* 0x000 */ u8 unk_0[0x7];
+	/* 0x007 */ u8 quest_id;
+	/* 0x008 */ u8 unk_8[0x10 - 0x8];
+	/* 0x010 */ u32 time_limit_ticks;
+	/* 0x014 */ u32 reward_total;
+	/* 0x018 */ u32 cart_penalty;
+	/* 0x01C */ s16 target_item[4];
+	/* 0x024 */ s16 target_item_quantity[4];
+	/* 0x02C */ s16 monster_cap_target[2];
+	/* 0x030 */ s16 monster_cap_quantity[2];
+	/* 0x034 */ s16 monster_lives;
+	/* 0x036 */ u8 unk_36[0x3C - 0x36];
+	/* 0x03C */ MONSTER_WORK* killed_monster;
+	/* 0x040 */ u32 hunt_type_flag;
+	/* 0x044 */ u8 unk_40[0x64 - 0x44];
+	/* 0x064 */ void* mib_head_ptr;
+	/* 0x068 */ u8 unk_68[4];
+	/* 0x06C */ void* mib_script_ptr;
+	/* 0x070 */ void* mib_text_ptr;
+	/* 0x074 */ void* mib_ents_ptr;
+	/* 0x078 */ void* mib_mons_ptr;
+	/* 0x07C */ void* mib_links_ptr;
+	/* 0x080 */ void* mib_origins_ptr;
+	/* 0x084 */ void* mib_msg_ptr;
+	/* 0x088 */ void* mib_rewards_ptr;
+	/* 0x08C */ void* mib_gathering_ptr;
+	/* 0x090 */ void* mib_objects_ptr;
+	/* 0x094 */ void* mib_header_ptr;
+	/* 0x098 */ u8 unk_98[0xAF - 0x98];
+	/* 0x0AF */ u8 quest_timer_chunks;
+	/* 0x0B0 */ MONSTER_WORK* active_monster;
+	/* 0x0B4 */ u8 hunter_ranks[4][2];
+	/* 0x0BC */ u8 unk_BC[0x13C - 0xBC];
+	/* 0x13C */ u32 break_flags;
+	/* 0x140 */ u8 unk_140[4];
+	/* 0x144 */ s16 target_monster[2];
+	/* 0x148 */ s16 target_monster_quantity[2];
+	/* 0x14C */ s16 fatalis_hp;
+	/* 0x14E */ u8 mib_level;
+	/* 0x14F */ u8 unk_14F[0x190 - 0x14F];
+} QUEST_WORK; // size: 0x190
 
 typedef struct {
 	    /* 0x000 */ u8 top_state;
@@ -420,7 +577,9 @@ typedef struct {
     /* 0x0D6 */ u8 unk_D6[0x52];
     /* 0x128 */ ITEM_SLOT quest_item_box[32];
     /* 0x1A8 */ u32 quest_item_box_taken_flags[2];
-    /* 0x1B0 */ u8 unk_1B0[0x30];
+    /* 0x1B0 */ u8 unk_1B0[0x1dc - 0x1b0];
+	/* 0x1DC */ u8 in_lobby;
+	/* 0x1DD */ u8 unk_1DD[0x1e0 - 0x1dd];
     /* 0x1E0 */ u16 current_sound_effect;
     /* 0x1E2 */ u8 unk_1E2[0x4];
 	/* 0x1E6 */ u8 unk_1E6;
